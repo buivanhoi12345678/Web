@@ -212,7 +212,6 @@
             font-size: 3.5rem;
             margin-bottom: 20px;
             background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
@@ -2517,38 +2516,38 @@
         }
 
         /* Thêm CSS cho loading states */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-}
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
 
-.loading-content {
-    background: var(--dark);
-    padding: 30px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px solid var(--primary);
-}
+        .loading-content {
+            background: var(--dark);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--primary);
+        }
 
-.course-sync-status {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: var(--glass);
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: 1px solid var(--accent);
-    font-size: 0.8rem;
-    z-index: 1000;
-}
+        .course-sync-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--glass);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--accent);
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
     </style>
 </head>
 
@@ -5215,57 +5214,57 @@
             });
         }
 
-       // Sửa hàm displayAllCourses để ưu tiên khóa học từ Firestore
-function displayAllCourses() {
-    const allCoursesContainer = document.getElementById('all-courses');
-    allCoursesContainer.innerHTML = '';
-    
-    // Sử dụng courses đã được đồng bộ
-    const coursesToShow = courses.slice((currentPage - 1) * coursesPerPage, currentPage * coursesPerPage);
-    
-    if (coursesToShow.length === 0) {
-        allCoursesContainer.innerHTML = `
+        // Sửa hàm displayAllCourses để ưu tiên khóa học từ Firestore
+        function displayAllCourses() {
+            const allCoursesContainer = document.getElementById('all-courses');
+            allCoursesContainer.innerHTML = '';
+
+            // Sử dụng courses đã được đồng bộ
+            const coursesToShow = courses.slice((currentPage - 1) * coursesPerPage, currentPage * coursesPerPage);
+
+            if (coursesToShow.length === 0) {
+                allCoursesContainer.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
                 <i class="fas fa-search" style="font-size: 3rem; color: var(--glass-border); margin-bottom: 20px;"></i>
                 <p>Chưa có khóa học nào. Hãy là người đầu tiên tạo khóa học!</p>
                 ${currentUser ? '<button class="btn-primary" onclick="addCourseModal.style.display=\'flex\'">Thêm Khóa Học Đầu Tiên</button>' : ''}
             </div>
         `;
-        return;
-    }
-    
-    coursesToShow.forEach(course => {
-        const courseCard = createCourseCard(course);
-        allCoursesContainer.appendChild(courseCard);
-    });
-}
+                return;
+            }
 
-// Sửa hàm displayFeaturedCourses
-function displayFeaturedCourses() {
-    const featuredContainer = document.getElementById('featured-courses');
-    featuredContainer.innerHTML = '';
-    
-    // Lấy 6 khóa học nổi bật hoặc mới nhất
-    const featuredCourses = courses
-        .filter(course => course.featured)
-        .slice(0, 6);
-    
-    // Nếu không đủ khóa học nổi bật, lấy khóa học mới nhất
-    if (featuredCourses.length < 6) {
-        const remaining = 6 - featuredCourses.length;
-        const latestCourses = courses
-            .filter(course => !course.featured)
-            .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-            .slice(0, remaining);
-        
-        featuredCourses.push(...latestCourses);
-    }
-    
-    featuredCourses.forEach(course => {
-        const courseCard = createCourseCard(course);
-        featuredContainer.appendChild(courseCard);
-    });
-}
+            coursesToShow.forEach(course => {
+                const courseCard = createCourseCard(course);
+                allCoursesContainer.appendChild(courseCard);
+            });
+        }
+
+        // Sửa hàm displayFeaturedCourses
+        function displayFeaturedCourses() {
+            const featuredContainer = document.getElementById('featured-courses');
+            featuredContainer.innerHTML = '';
+
+            // Lấy 6 khóa học nổi bật hoặc mới nhất
+            const featuredCourses = courses
+                .filter(course => course.featured)
+                .slice(0, 6);
+
+            // Nếu không đủ khóa học nổi bật, lấy khóa học mới nhất
+            if (featuredCourses.length < 6) {
+                const remaining = 6 - featuredCourses.length;
+                const latestCourses = courses
+                    .filter(course => !course.featured)
+                    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+                    .slice(0, remaining);
+
+                featuredCourses.push(...latestCourses);
+            }
+
+            featuredCourses.forEach(course => {
+                const courseCard = createCourseCard(course);
+                featuredContainer.appendChild(courseCard);
+            });
+        }
 
         // Create course card element
         function createCourseCard(course) {
@@ -5363,7 +5362,7 @@ function displayFeaturedCourses() {
             }
         }
 
-        
+
 
         // Show course detail
         function showCourseDetail(courseId) {
@@ -6546,243 +6545,243 @@ function helloWorld() {
         }
 
         // Hàm chuyển đổi URL YouTube sang embed URL
-function convertToEmbedUrl(url) {
-    if (!url) return '';
-    
-    // Nếu đã là embed URL thì giữ nguyên
-    if (url.includes('youtube.com/embed/')) {
-        return url;
-    }
-    
-    // Chuyển đổi từ các dạng URL YouTube khác nhau
-    let videoId = '';
-    
-    // Dạng: https://www.youtube.com/watch?v=VIDEO_ID
-    const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
-    if (watchMatch) {
-        videoId = watchMatch[1];
-    }
-    
-    // Dạng: https://youtu.be/VIDEO_ID
-    const youtuBeMatch = url.match(/youtu\.be\/([^?]+)/);
-    if (youtuBeMatch) {
-        videoId = youtuBeMatch[1];
-    }
-    
-    // Dạng: https://www.youtube.com/embed/VIDEO_ID
-    const embedMatch = url.match(/youtube\.com\/embed\/([^?]+)/);
-    if (embedMatch) {
-        videoId = embedMatch[1];
-    }
-    
-    if (videoId) {
-        // Loại bỏ các tham số không cần thiết
-        videoId = videoId.split('?')[0];
-        return `https://www.youtube.com/embed/${videoId}`;
-    }
-    
-    return url; // Trả về URL gốc nếu không chuyển đổi được
-}
+        function convertToEmbedUrl(url) {
+            if (!url) return '';
 
-// Sửa hàm collectCourseData để chuyển đổi URL video
-function collectCourseData() {
-    const chapters = [];
-    const chapterElements = document.querySelectorAll('.chapter-item');
-    
-    chapterElements.forEach(chapterElement => {
-        const chapterTitle = chapterElement.querySelector('.chapter-title-input').value;
-        const lessons = [];
-        
-        const lessonElements = chapterElement.querySelectorAll('.lesson-item');
-        lessonElements.forEach(lessonElement => {
-            const lessonTitle = lessonElement.querySelector('.lesson-title').value;
-            const lessonVideo = lessonElement.querySelector('.lesson-video').value;
-            const lessonCode = lessonElement.querySelector('.lesson-code').value;
-            
-            if (lessonTitle) {
-                lessons.push({
-                    title: lessonTitle,
-                    video: convertToEmbedUrl(lessonVideo), // Chuyển đổi URL
-                    code: lessonCode,
-                    duration: "10:00"
-                });
+            // Nếu đã là embed URL thì giữ nguyên
+            if (url.includes('youtube.com/embed/')) {
+                return url;
             }
-        });
-        
-        if (chapterTitle) {
-            chapters.push({
-                title: chapterTitle,
-                lessons: lessons
+
+            // Chuyển đổi từ các dạng URL YouTube khác nhau
+            let videoId = '';
+
+            // Dạng: https://www.youtube.com/watch?v=VIDEO_ID
+            const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
+            if (watchMatch) {
+                videoId = watchMatch[1];
+            }
+
+            // Dạng: https://youtu.be/VIDEO_ID
+            const youtuBeMatch = url.match(/youtu\.be\/([^?]+)/);
+            if (youtuBeMatch) {
+                videoId = youtuBeMatch[1];
+            }
+
+            // Dạng: https://www.youtube.com/embed/VIDEO_ID
+            const embedMatch = url.match(/youtube\.com\/embed\/([^?]+)/);
+            if (embedMatch) {
+                videoId = embedMatch[1];
+            }
+
+            if (videoId) {
+                // Loại bỏ các tham số không cần thiết
+                videoId = videoId.split('?')[0];
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+
+            return url; // Trả về URL gốc nếu không chuyển đổi được
+        }
+
+        // Sửa hàm collectCourseData để chuyển đổi URL video
+        function collectCourseData() {
+            const chapters = [];
+            const chapterElements = document.querySelectorAll('.chapter-item');
+
+            chapterElements.forEach(chapterElement => {
+                const chapterTitle = chapterElement.querySelector('.chapter-title-input').value;
+                const lessons = [];
+
+                const lessonElements = chapterElement.querySelectorAll('.lesson-item');
+                lessonElements.forEach(lessonElement => {
+                    const lessonTitle = lessonElement.querySelector('.lesson-title').value;
+                    const lessonVideo = lessonElement.querySelector('.lesson-video').value;
+                    const lessonCode = lessonElement.querySelector('.lesson-code').value;
+
+                    if (lessonTitle) {
+                        lessons.push({
+                            title: lessonTitle,
+                            video: convertToEmbedUrl(lessonVideo), // Chuyển đổi URL
+                            code: lessonCode,
+                            duration: "10:00"
+                        });
+                    }
+                });
+
+                if (chapterTitle) {
+                    chapters.push({
+                        title: chapterTitle,
+                        lessons: lessons
+                    });
+                }
+            });
+
+            return {
+                title: document.getElementById('courseTitle').value,
+                description: document.getElementById('courseDescription').value,
+                price: parseInt(document.getElementById('coursePrice').value) || 0,
+                image: document.getElementById('courseImage').value,
+                videoUrl: convertToEmbedUrl(document.getElementById('courseVideo').value), // Chuyển đổi URL giới thiệu
+                category: document.getElementById('courseCategory').value,
+                isFree: document.getElementById('courseIsFree').checked,
+                isFeatured: document.getElementById('courseIsFeatured').checked,
+                chapters: chapters
+            };
+        }
+
+
+        // Hàm đồng bộ khóa học giữa Firestore và local
+        function syncCourses() {
+            // Tạo map để tránh trùng lặp
+            const courseMap = new Map();
+
+            // Ưu tiên khóa học từ Firestore trước
+            firestoreCourses.forEach(course => {
+                courseMap.set(course.id, course);
+            });
+
+            // Thêm khóa học mẫu nếu chưa có
+            courses.forEach(course => {
+                if (!courseMap.has(course.id)) {
+                    courseMap.set(course.id, course);
+                }
+            });
+
+            // Cập nhật mảng courses toàn cục
+            courses = Array.from(courseMap.values());
+
+            // Sắp xếp theo thời gian tạo mới nhất
+            courses.sort((a, b) => {
+                const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+                const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+                return dateB - dateA;
             });
         }
-    });
-    
-    return {
-        title: document.getElementById('courseTitle').value,
-        description: document.getElementById('courseDescription').value,
-        price: parseInt(document.getElementById('coursePrice').value) || 0,
-        image: document.getElementById('courseImage').value,
-        videoUrl: convertToEmbedUrl(document.getElementById('courseVideo').value), // Chuyển đổi URL giới thiệu
-        category: document.getElementById('courseCategory').value,
-        isFree: document.getElementById('courseIsFree').checked,
-        isFeatured: document.getElementById('courseIsFeatured').checked,
-        chapters: chapters
-    };
-}
-
-
-// Hàm đồng bộ khóa học giữa Firestore và local
-function syncCourses() {
-    // Tạo map để tránh trùng lặp
-    const courseMap = new Map();
-    
-    // Ưu tiên khóa học từ Firestore trước
-    firestoreCourses.forEach(course => {
-        courseMap.set(course.id, course);
-    });
-    
-    // Thêm khóa học mẫu nếu chưa có
-    courses.forEach(course => {
-        if (!courseMap.has(course.id)) {
-            courseMap.set(course.id, course);
-        }
-    });
-    
-    // Cập nhật mảng courses toàn cục
-    courses = Array.from(courseMap.values());
-    
-    // Sắp xếp theo thời gian tạo mới nhất
-    courses.sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
-        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
-        return dateB - dateA;
-    });
-}
 
         // Biến toàn cục để lưu trữ khóa học từ Firestore
-let firestoreCourses = [];
+        let firestoreCourses = [];
 
-// Hàm load khóa học từ Firestore
-function loadCoursesFromFirestore() {
-    return db.collection('courses')
-        .orderBy('createdAt', 'desc')
-        .get()
-        .then((querySnapshot) => {
-            console.log('Loaded courses from Firestore:', querySnapshot.size);
-            
-            firestoreCourses = [];
-            querySnapshot.forEach((doc) => {
-                const courseData = doc.data();
-                courseData.firestoreId = doc.id;
-                
-                // Đảm bảo có đầy đủ các trường cần thiết
-                if (!courseData.id) {
-                    courseData.id = parseInt(doc.id) || Date.now();
-                }
-                
-                firestoreCourses.push(courseData);
-            });
-            
-            syncCourses();
-            return firestoreCourses;
-        })
-        .catch((error) => {
-            console.error('Error loading courses from Firestore:', error);
-            // Fallback to sample courses
-            syncCourses();
-            return courses;
-        });
-}
+        // Hàm load khóa học từ Firestore
+        function loadCoursesFromFirestore() {
+            return db.collection('courses')
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then((querySnapshot) => {
+                    console.log('Loaded courses from Firestore:', querySnapshot.size);
 
-// Sửa hàm handleAddCourse để đồng bộ ngay lập tức
-function handleAddCourse(e) {
-    e.preventDefault();
-    
-    const courseData = collectCourseData();
-    
-    if (!validateCourseData(courseData)) {
-        return;
-    }
-    
-    if (!currentUser) {
-        showNotification('Vui lòng đăng nhập để thêm khóa học!', 'error');
-        return;
-    }
+                    firestoreCourses = [];
+                    querySnapshot.forEach((doc) => {
+                        const courseData = doc.data();
+                        courseData.firestoreId = doc.id;
 
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const originalText = submitBtn.textContent;
-    submitBtn.innerHTML = '<div class="spinner"></div> Đang thêm...';
-    submitBtn.disabled = true;
+                        // Đảm bảo có đầy đủ các trường cần thiết
+                        if (!courseData.id) {
+                            courseData.id = parseInt(doc.id) || Date.now();
+                        }
 
-    // Tạo ID mới
-    const newId = Date.now();
-    
-    // Tạo khóa học object
-    const newCourse = {
-        id: newId,
-        title: courseData.title,
-        description: courseData.description,
-        price: courseData.isFree ? 0 : courseData.price,
-        image: courseData.image,
-        videoUrl: courseData.videoUrl,
-        rating: 0,
-        ratingCount: 0,
-        students: 0,
-        isFree: courseData.isFree,
-        featured: courseData.isFeatured,
-        category: courseData.category,
-        chapters: courseData.chapters,
-        instructorId: currentUser.uid,
-        instructorName: currentUser.displayName || currentUser.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        status: 'published',
-        totalLessons: courseData.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0)
-    };
+                        firestoreCourses.push(courseData);
+                    });
 
-    console.log('Adding course to Firestore:', newCourse);
+                    syncCourses();
+                    return firestoreCourses;
+                })
+                .catch((error) => {
+                    console.error('Error loading courses from Firestore:', error);
+                    // Fallback to sample courses
+                    syncCourses();
+                    return courses;
+                });
+        }
 
-    // Thêm vào Firestore
-    db.collection('courses').add(newCourse)
-        .then((docRef) => {
-            console.log('Course added with ID:', docRef.id);
-            
-            // Thêm vào local array ngay lập tức
-            newCourse.firestoreId = docRef.id;
-            courses.unshift(newCourse);
-            
-            showNotification('✅ Đã thêm khóa học thành công!', 'success');
-            
-            // Đóng modal và reset form
-            addCourseModal.style.display = 'none';
-            document.getElementById('addCourseForm').reset();
-            document.getElementById('chaptersContainer').innerHTML = '';
-            
-            // Hiển thị ngay lập tức
-            displayFeaturedCourses();
-            displayAllCourses();
-            
-            // Chuyển đến trang courses sau 1 giây
-            setTimeout(() => {
-                navigateToPage('courses');
-            }, 1000);
-            
-            return updateInstructorCourseCount(newId);
-        })
-        .catch((error) => {
-            console.error('Firestore error details:', error);
-            
-            if (error.code === 'permission-denied') {
-                showNotification('❌ Lỗi quyền truy cập! Vui lòng kiểm tra Firestore rules.', 'error');
-            } else {
-                showNotification('❌ Lỗi khi thêm khóa học: ' + error.message, 'error');
+        // Sửa hàm handleAddCourse để đồng bộ ngay lập tức
+        function handleAddCourse(e) {
+            e.preventDefault();
+
+            const courseData = collectCourseData();
+
+            if (!validateCourseData(courseData)) {
+                return;
             }
-        })
-        .finally(() => {
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        });
-}
+
+            if (!currentUser) {
+                showNotification('Vui lòng đăng nhập để thêm khóa học!', 'error');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<div class="spinner"></div> Đang thêm...';
+            submitBtn.disabled = true;
+
+            // Tạo ID mới
+            const newId = Date.now();
+
+            // Tạo khóa học object
+            const newCourse = {
+                id: newId,
+                title: courseData.title,
+                description: courseData.description,
+                price: courseData.isFree ? 0 : courseData.price,
+                image: courseData.image,
+                videoUrl: courseData.videoUrl,
+                rating: 0,
+                ratingCount: 0,
+                students: 0,
+                isFree: courseData.isFree,
+                featured: courseData.isFeatured,
+                category: courseData.category,
+                chapters: courseData.chapters,
+                instructorId: currentUser.uid,
+                instructorName: currentUser.displayName || currentUser.email,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'published',
+                totalLessons: courseData.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0)
+            };
+
+            console.log('Adding course to Firestore:', newCourse);
+
+            // Thêm vào Firestore
+            db.collection('courses').add(newCourse)
+                .then((docRef) => {
+                    console.log('Course added with ID:', docRef.id);
+
+                    // Thêm vào local array ngay lập tức
+                    newCourse.firestoreId = docRef.id;
+                    courses.unshift(newCourse);
+
+                    showNotification('✅ Đã thêm khóa học thành công!', 'success');
+
+                    // Đóng modal và reset form
+                    addCourseModal.style.display = 'none';
+                    document.getElementById('addCourseForm').reset();
+                    document.getElementById('chaptersContainer').innerHTML = '';
+
+                    // Hiển thị ngay lập tức
+                    displayFeaturedCourses();
+                    displayAllCourses();
+
+                    // Chuyển đến trang courses sau 1 giây
+                    setTimeout(() => {
+                        navigateToPage('courses');
+                    }, 1000);
+
+                    return updateInstructorCourseCount(newId);
+                })
+                .catch((error) => {
+                    console.error('Firestore error details:', error);
+
+                    if (error.code === 'permission-denied') {
+                        showNotification('❌ Lỗi quyền truy cập! Vui lòng kiểm tra Firestore rules.', 'error');
+                    } else {
+                        showNotification('❌ Lỗi khi thêm khóa học: ' + error.message, 'error');
+                    }
+                })
+                .finally(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+        }
 
 
         // Hàm cập nhật số lượng khóa học của giảng viên
@@ -6833,133 +6832,133 @@ function handleAddCourse(e) {
         }
 
         // Hàm khởi tạo ứng dụng
-function initializeApp() {
-    updateCartCount();
-    initializeCodeEditor();
-    observeAnimations();
-    
-    // Load khóa học từ Firestore khi ứng dụng khởi chạy
-    loadCoursesFromFirestore().then(() => {
-        displayFeaturedCourses();
-        displayAllCourses();
-        generatePagination();
-    });
-    
-    // Kiểm tra auth state
-    checkAuthState();
-}
+        function initializeApp() {
+            updateCartCount();
+            initializeCodeEditor();
+            observeAnimations();
 
-// Gọi hàm khởi tạo khi DOM đã load
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-});
-
-// Thêm real-time listener để cập nhật ngay lập tức
-function setupCoursesRealTimeListener() {
-    return db.collection('courses')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(
-            (snapshot) => {
-                console.log('Real-time update received:', snapshot.size, 'courses');
-                
-                firestoreCourses = [];
-                snapshot.forEach((doc) => {
-                    const courseData = doc.data();
-                    courseData.firestoreId = doc.id;
-                    firestoreCourses.push(courseData);
-                });
-                
-                syncCourses();
-                
-                // Cập nhật UI
-                if (document.getElementById('courses').classList.contains('active')) {
-                    displayAllCourses();
-                    generatePagination();
-                }
-                if (document.getElementById('home').classList.contains('active')) {
-                    displayFeaturedCourses();
-                }
-            },
-            (error) => {
-                console.error('Real-time listener error:', error);
-                // Retry after 5 seconds
-                setTimeout(setupCoursesRealTimeListener, 5000);
-            }
-        );
-}
-
-// Hàm kiểm tra kết nối Firestore
-function checkFirestoreConnection() {
-    return db.collection('courses').limit(1).get()
-        .then(() => {
-            console.log('Firestore connection OK');
-            return true;
-        })
-        .catch((error) => {
-            console.error('Firestore connection failed:', error);
-            return false;
-        });
-}
-
-
-// Gọi trong hàm initializeApp
-function initializeApp() {
-    console.log('Initializing app...');
-    
-    checkFirestoreConnection().then((isConnected) => {
-        if (isConnected) {
+            // Load khóa học từ Firestore khi ứng dụng khởi chạy
             loadCoursesFromFirestore().then(() => {
                 displayFeaturedCourses();
                 displayAllCourses();
                 generatePagination();
-                setupCoursesRealTimeListener();
             });
-        } else {
-            // Sử dụng sample courses nếu không kết nối được
-            syncCourses();
-            displayFeaturedCourses();
-            displayAllCourses();
-            generatePagination();
+
+            // Kiểm tra auth state
+            checkAuthState();
         }
-    });
-    
-    updateCartCount();
-    initializeCodeEditor();
-    observeAnimations();
-    checkAuthState();
-}
+
+        // Gọi hàm khởi tạo khi DOM đã load
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeApp();
+        });
+
+        // Thêm real-time listener để cập nhật ngay lập tức
+        function setupCoursesRealTimeListener() {
+            return db.collection('courses')
+                .orderBy('createdAt', 'desc')
+                .onSnapshot(
+                    (snapshot) => {
+                        console.log('Real-time update received:', snapshot.size, 'courses');
+
+                        firestoreCourses = [];
+                        snapshot.forEach((doc) => {
+                            const courseData = doc.data();
+                            courseData.firestoreId = doc.id;
+                            firestoreCourses.push(courseData);
+                        });
+
+                        syncCourses();
+
+                        // Cập nhật UI
+                        if (document.getElementById('courses').classList.contains('active')) {
+                            displayAllCourses();
+                            generatePagination();
+                        }
+                        if (document.getElementById('home').classList.contains('active')) {
+                            displayFeaturedCourses();
+                        }
+                    },
+                    (error) => {
+                        console.error('Real-time listener error:', error);
+                        // Retry after 5 seconds
+                        setTimeout(setupCoursesRealTimeListener, 5000);
+                    }
+                );
+        }
+
+        // Hàm kiểm tra kết nối Firestore
+        function checkFirestoreConnection() {
+            return db.collection('courses').limit(1).get()
+                .then(() => {
+                    console.log('Firestore connection OK');
+                    return true;
+                })
+                .catch((error) => {
+                    console.error('Firestore connection failed:', error);
+                    return false;
+                });
+        }
+
+
+        // Gọi trong hàm initializeApp
+        function initializeApp() {
+            console.log('Initializing app...');
+
+            checkFirestoreConnection().then((isConnected) => {
+                if (isConnected) {
+                    loadCoursesFromFirestore().then(() => {
+                        displayFeaturedCourses();
+                        displayAllCourses();
+                        generatePagination();
+                        setupCoursesRealTimeListener();
+                    });
+                } else {
+                    // Sử dụng sample courses nếu không kết nối được
+                    syncCourses();
+                    displayFeaturedCourses();
+                    displayAllCourses();
+                    generatePagination();
+                }
+            });
+
+            updateCartCount();
+            initializeCodeEditor();
+            observeAnimations();
+            checkAuthState();
+        }
 
         // Navigate to page
-       function navigateToPage(page) {
-    // Ẩn tất cả các trang
-    pageContainers.forEach(container => {
-        container.classList.remove('active');
-    });
+        function navigateToPage(page) {
+            // Ẩn tất cả các trang
+            pageContainers.forEach(container => {
+                container.classList.remove('active');
+            });
 
-    // Hiện trang được chọn
-    document.getElementById(page).classList.add('active');
+            // Hiện trang được chọn
+            document.getElementById(page).classList.add('active');
 
-    // Cập nhật trạng thái nav link
-    navLinks.forEach(link => {
-        if (link.getAttribute('data-page') === page) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
+            // Cập nhật trạng thái nav link
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === page) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
 
-    // Reload dữ liệu khi chuyển đến trang courses hoặc home
-    if (page === 'courses' || page === 'home') {
-        loadCoursesFromFirestore().then(() => {
-            if (page === 'courses') {
-                displayAllCourses();
-                generatePagination();
-            } else if (page === 'home') {
-                displayFeaturedCourses();
+            // Reload dữ liệu khi chuyển đến trang courses hoặc home
+            if (page === 'courses' || page === 'home') {
+                loadCoursesFromFirestore().then(() => {
+                    if (page === 'courses') {
+                        displayAllCourses();
+                        generatePagination();
+                    } else if (page === 'home') {
+                        displayFeaturedCourses();
+                    }
+                });
             }
-        });
-    }
-            
+
 
             // Scroll to top
             window.scrollTo(0, 0);
@@ -7509,7 +7508,6 @@ Người dùng: ${message}`
             // In a real app, you would save this to a database or send an email
             // For now, we'll just show a success message
             showNotification('Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi sẽ phản hồi sớm nhất có thể.', 'success');
-
             // Reset form
             contactForm.reset();
         }
