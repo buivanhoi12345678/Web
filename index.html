@@ -7494,8 +7494,6 @@ Người dùng: ${message}`
                 }
             });
         }
-
-        // Handle contact form submission
         function handleContactForm(e) {
             e.preventDefault();
 
@@ -7505,8 +7503,6 @@ Người dùng: ${message}`
             const subject = document.getElementById('contactSubject').value;
             const message = document.getElementById('contactMessage').value;
 
-            // In a real app, you would save this to a database or send an email
-            // For now, we'll just show a success message
             showNotification('Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi sẽ phản hồi sớm nhất có thể.', 'success');
             // Reset form
             contactForm.reset();
